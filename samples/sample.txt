@@ -1,0 +1,5 @@
+Hello World!
+
+This is a test file.
+
+It contains 5 lines, 16 words and 84 characters.
