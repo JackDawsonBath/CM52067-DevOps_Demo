@@ -8,7 +8,7 @@ def count_words(text: str) -> int:
 def count_lines(text:str) -> int:
     if not text:
         return 0
-    return text.count("\n") # TODO: Fix off-by-one error. 
+    return text.count("\n") + 1
 
 def analyse(text:str) -> dict:
     return {
