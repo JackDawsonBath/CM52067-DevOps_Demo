@@ -10,11 +10,11 @@ An intro to Git as a whole, as well as the structure of this repo and the simple
 
 ### Session 2 (18/03/2026)
 * Testing
-* Makefiles
 
 Building a simple testing workflow for our app.
 
 ### Session 3 (25/03/2026)
+* Makefiles
 * CI with Github Actions
 * YAML
 
