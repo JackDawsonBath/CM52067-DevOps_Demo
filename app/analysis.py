@@ -3,6 +3,7 @@ def count_letters(text: str) -> int:
     return len(text)
 
 def count_words(text: str) -> int:
+    if len(text) == 0: return 0
     return len(text.split(" "))
 
 def count_lines(text:str) -> int:
