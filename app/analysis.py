@@ -1,10 +1,10 @@
+import re
 
 def count_letters(text: str) -> int:
     return len(text)
 
 def count_words(text: str) -> int:
-    if len(text) == 0: return 0
-    return len(text.split(" "))
+    return len(re.findall(r"\S+",text))
 
 def count_lines(text:str) -> int:
     if not text:
