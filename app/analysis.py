@@ -1,6 +1,6 @@
 import re
 
-def count_letters(text: str) -> int:
+def count_chars(text: str) -> int:
     return len(text)
 
 def count_words(text: str) -> int:
@@ -13,7 +13,7 @@ def count_lines(text:str) -> int:
 
 def analyse(text:str) -> dict:
     return {
-        "letters":count_letters(text),
+        "chars":count_chars(text),
         "words":count_words(text),
         "lines":count_lines(text)
     }

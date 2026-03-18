@@ -12,12 +12,12 @@ def test_counting(subtests):
 
     ]
 
-    for text, lines, words, letters in cases:
+    for text, lines, words, chars in cases:
         with subtests.test(text=text):
             result = analyse(text)
             assert result["lines"] == lines
             assert result["words"] == words
-            assert result["letters"] == letters
+            assert result["chars"] == chars
 
 
 def test_large():
