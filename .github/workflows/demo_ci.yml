@@ -11,7 +11,7 @@ jobs:
         steps:
             -   name: Checkout repo
                 uses: actions/checkout@v5
-
+                
             -   name: Setup Python
                 uses: actions/setup-python@v6
                 with:
@@ -24,6 +24,9 @@ jobs:
             -   name: Run tests
                 run: |
                     python -m pytest
+
+            -   name: Fetch main
+                run: git fetch origin main
             
             -   name: Check TODOs
                 run: |
