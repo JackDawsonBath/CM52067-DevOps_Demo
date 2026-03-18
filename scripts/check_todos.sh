@@ -1,9 +1,29 @@
 #!/usr/bin/env bash
 
-files=$(git diff --name-only origin/main -- '*.py')
+# Set BASE and HEAD from Github environment variables, with fallback for local/non-git tests
+BASE=${GITHUB_BASE_SHA:-HEAD~1}
+HEAD=${GITHUB_SHA:-HEAD}
+
+files=$(git diff --name-only "$BASE" "$HEAD" -- '*.py')
 
 if [ -z "$files" ]; then
 	exit 0
 fi
 
-grep -Hn "TODO:" $files && exit 1 || exit 0
+todo_found=0
+
+for f in $files; do
+	matches=$(grep -Hn "TODO:" $f)
+	if [ -n  "matches" ]; then
+		echo "$matches"
+		todo_found=1
+	fi
+
+done
+
+if [ $todo_found -eq 1 ]; then
+	echo "Some changed files contain TODOs. Please review."
+	exit 1
+else
+	exit 0
+fi
