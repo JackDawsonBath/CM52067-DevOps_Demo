@@ -24,3 +24,7 @@ jobs:
             -   name: Run tests
                 run: |
                     python -m pytest
+            
+            -   name: Check TODOs
+                run: |
+                    bash scripts/check_todos.sh
