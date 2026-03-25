@@ -16,4 +16,4 @@ jobs:
                 run: docker build -t textstats . 
 
             -   name: Run Docker Container tests
-                run: docker run textstats
+                run: docker run textstats python -m pytest 
