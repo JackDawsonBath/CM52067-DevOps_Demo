@@ -15,4 +15,4 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # Runs 'python main.py sample.txt' 
-CMD ["python", "main.py", "sample.txt"]
+CMD ["python", "app/main.py", "samples/sample.txt"]
