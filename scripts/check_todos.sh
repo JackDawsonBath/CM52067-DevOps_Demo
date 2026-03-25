@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Set BASE and HEAD from Github environment variables, with fallback for local/non-git tests
-BASE=${GITHUB_BASE_SHA:-HEAD~1}
-HEAD=${GITHUB_SHA:-HEAD}
+BASE=${GITHUB_BASE_SHA}
+HEAD=${GITHUB_SHA}
 
 files=$(git diff --name-only "$BASE" "$HEAD" -- '*.py')
 
