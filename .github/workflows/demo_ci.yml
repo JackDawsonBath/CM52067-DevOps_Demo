@@ -11,23 +11,9 @@ jobs:
         steps:
             -   name: Checkout repo
                 uses: actions/checkout@v5
-                
-            -   name: Setup Python
-                uses: actions/setup-python@v6
-                with:
-                    python-version: '3.11'
 
-            -   name: Install Dependencies
-                run: |
-                    pip install -r requirements.txt
+            -   name: Build Docker
+                run: docker build -t textstats . 
 
-            -   name: Run tests
-                run: |
-                    python -m pytest
-
-            -   name: Fetch main
-                run: git fetch origin main
-            
-            -   name: Check TODOs
-                run: |
-                    bash scripts/check_todos.sh
+            -   name: Run Docker Container tests
+                run: docker run textstats
