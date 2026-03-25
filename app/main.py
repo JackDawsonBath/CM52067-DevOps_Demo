@@ -7,8 +7,6 @@ def main():
     if len(sys.argv) < 2:
         print('Usage: python main.py <file>')
         return
-    
-    # TODO: Trigger TODO warnings.
 
     file = sys.argv[1]
 
