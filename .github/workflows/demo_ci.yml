@@ -4,19 +4,21 @@ on:
   push:
   pull_request:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5 # Updated version
 
       - name: Build Docker image
         run: docker build -t textstats .
 
       - name: Run test pipeline
-        # Added backslashes for multi-line bash command
         run: |
           docker run --name report-container \
             -e COMMIT=${{ github.sha }} \
@@ -26,26 +28,21 @@ jobs:
               mkdir -p report &&
               python -m pytest -v > report/test_output.txt || true &&
               bash scripts/build_info.sh &&
-              tectonic report/template.tex --outdir report --print --keep-logs
+              tectonic report/template.tex --outdir report --print --keep-logs &&
+              mv report/template.pdf report/report.pdf
             "
 
       - name: Copy report
-        # Run this even if the 'Run test pipeline' step had failing tests
-        # We have to target template.pdf because Tectonic output names are based on input .tex with no easy way to change
         if: always()
         run: |
-            docker cp report-container:/app/report/template.pdf report.pdf || echo "PDF not found"
-            docker cp report-container:/app/report/template.log report.log || echo "Log not found"
+          docker cp report-container:/app/report/report.pdf report.pdf || echo "PDF not found"
+          docker cp report-container:/app/report/template.log report.log || echo "Log not found"
 
       - name: Upload build artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5 # Updated version
         with:
-          name: report-and-logs
+          name: final-report
           path: |
-                report.pdf
-                report.log
-
-      - name: Cleanup old containers
-        if: always()
-        run: docker rm -f report-container || true
+            report.pdf
+            report.log
