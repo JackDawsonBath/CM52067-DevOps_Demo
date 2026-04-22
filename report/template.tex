@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{fvextra} % Handles the wrapping and boxes
+\usepackage{xcolor}  % Allows for a gray border
+
+% Configure the look of the test output
+\fvset{
+    breaklines=true,     % This fixes wrapping issues
+    frame=single,        % Puts the output in a box
+    rulecolor=\color{gray},
+    fontsize=\small,     
+    numbers=left,        
+    numbersep=3pt
+}
+
+\begin{document}
+
+\section*{Build Information}
+\input{build_info.tex}
+
+\section*{Test Results}
+\VerbatimInput{test_output.txt}
+
+\end{document}

@@ -1,33 +1,51 @@
 name: CI Tests
 
 on: 
-    push:
-    pull_request:
+  push:
+  pull_request:
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest
 
-        steps:
-            -   name: Checkout repo
-                uses: actions/checkout@v5
-                
-            -   name: Setup Python
-                uses: actions/setup-python@v6
-                with:
-                    python-version: '3.11'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-            -   name: Install Dependencies
-                run: |
-                    pip install -r requirements.txt
+      - name: Build Docker image
+        run: docker build -t textstats .
 
-            -   name: Run tests
-                run: |
-                    python -m pytest
+      - name: Run test pipeline
+        # Added backslashes for multi-line bash command
+        run: |
+          docker run --name report-container \
+            -e COMMIT=${{ github.sha }} \
+            -e BRANCH=${{ github.ref_name }} \
+            -e RUN=${{ github.run_number }} \
+            textstats bash -c "
+              mkdir -p report &&
+              python -m pytest -v > report/test_output.txt || true &&
+              bash scripts/build_info.sh &&
+              tectonic report/template.tex --outdir report --print --keep-logs
+            "
 
-            -   name: Fetch main
-                run: git fetch origin main
-            
-            -   name: Check TODOs
-                run: |
-                    bash scripts/check_todos.sh
+      - name: Copy report
+        # Run this even if the 'Run test pipeline' step had failing tests
+        # We have to target template.pdf because Tectonic output names are based on input .tex with no easy way to change
+        if: always()
+        run: |
+            docker cp report-container:/app/report/template.pdf report.pdf || echo "PDF not found"
+            docker cp report-container:/app/report/template.log report.log || echo "Log not found"
+
+      - name: Upload build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-and-logs
+          path: |
+                report.pdf
+                report.log
+
+      - name: Cleanup old containers
+        if: always()
+        run: docker rm -f report-container || true
